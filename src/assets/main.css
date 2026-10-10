@@ -1,0 +1,470 @@
+:root {
+  --bg: #0b1d3a;
+  --bg-deep: #071430;
+  --surface: #13294d;
+  --border: #22406e;
+  --text: #ffffff;
+  --muted: #b5c4de;
+  --accent: #4cc9f0;
+  --radius: 12px;
+  --shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+  --sidebar-w: 260px;
+
+  font-family: 'Montserrat', system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+body {
+  min-height: 100vh;
+}
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ---------- Sidebar ---------- */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: var(--sidebar-w);
+  background: var(--bg-deep);
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  overflow-y: auto;
+  z-index: 20;
+  transition: transform 0.25s ease;
+}
+
+.logo {
+  font-weight: 700;
+  font-size: 1.6rem;
+  letter-spacing: 0.5px;
+  margin-bottom: 28px;
+  text-align: center;
+}
+.logo-small {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 8px;
+  color: var(--muted);
+  transition:
+    background 0.2s,
+    color 0.2s;
+}
+.nav-link:hover {
+  background: var(--surface);
+  color: var(--text);
+}
+.nav-link.router-link-active {
+  background: var(--surface);
+  color: var(--accent);
+}
+
+.nav-label {
+  margin: 22px 12px 8px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+}
+
+/* ---------- Layout ---------- */
+.topbar {
+  display: none;
+}
+.overlay {
+  display: none;
+}
+
+/* Area utama: mulai setelah sidebar, isi dipusatkan di sisa ruang */
+.content {
+  margin-left: var(--sidebar-w);
+  padding: 40px 48px;
+}
+
+/* Setiap elemen langsung di dalam .content dibatasi lebarnya dan dipusatkan */
+.content > * {
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---------- Hero / placeholder ---------- */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: center;
+  margin-bottom: 48px;
+}
+
+h1 {
+  font-size: 2.6rem;
+  font-weight: 700;
+}
+h2 {
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--accent);
+  margin: 8px 0 16px;
+}
+.hero p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.hero-media img,
+.img-placeholder {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+.img-placeholder {
+  display: grid;
+  place-items: center;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- Kartu topik ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow);
+  transition:
+    transform 0.2s,
+    border-color 0.2s;
+}
+.card:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+}
+.card-icon {
+  font-size: 1.8rem;
+}
+.card h3 {
+  margin: 10px 0 6px;
+  font-size: 1.05rem;
+}
+.card p {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+/* ---------- Responsive (mobile & tablet kecil) ---------- */
+@media (max-width: 900px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+  .sidebar.open {
+    transform: translateX(0);
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 12px 16px;
+    background: var(--bg-deep);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .menu-btn {
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    padding: 6px 10px;
+    font-size: 1.1rem;
+    cursor: pointer;
+  }
+
+  .overlay {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s;
+    z-index: 15;
+  }
+  .overlay.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .content {
+    margin-left: 0;
+    padding: 24px 16px;
+  }
+  .hero {
+    grid-template-columns: 1fr;
+  }
+  h1 {
+    font-size: 2rem;
+  }
+}
+.sections {
+  display: grid;
+  gap: 12px;
+}
+
+.section-card {
+  padding: 0;
+  overflow: hidden;
+}
+.section-card:hover {
+  transform: none;
+}
+
+.section-head {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.section-head:hover {
+  color: var(--accent);
+}
+
+.section-body {
+  padding: 0 20px 20px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.nav-icon {
+  width: 1.5em;
+  display: inline-flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+/* ---------- Diagram exploded view ---------- */
+.diagram {
+  margin-top: 40px;
+}
+.hotspot {
+  margin: 0;
+}
+.hotspot-img {
+  position: relative;
+}
+
+.hotspot-img img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+  box-shadow: var(--shadow);
+}
+
+.hotspot figcaption {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-align: center;
+}
+
+.pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 2px solid var(--accent);
+  background: var(--bg-deep);
+  color: var(--text);
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+.pin:hover,
+.pin:focus-visible {
+  background: var(--accent);
+  color: var(--bg-deep);
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.pin-tip {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translate(-50%, 6px);
+  opacity: 0;
+  pointer-events: none;
+  white-space: nowrap;
+  padding: 6px 10px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 600;
+  box-shadow: var(--shadow);
+  transition: opacity 0.2s, transform 0.2s;
+}
+.pin:hover .pin-tip,
+.pin:focus-visible .pin-tip {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+/* ---------- Rekomendasi ---------- */
+.recs { margin-top: 40px; }
+.recs-title { font-size: 1.4rem; margin-bottom: 16px; }
+.tier-range { color: var(--accent); font-size: 0.85rem; margin: 4px 0 12px; }
+.tier-items { list-style: none; padding: 0; display: grid; gap: 10px; }
+.tier-items li { display: grid; gap: 2px; color: var(--muted); font-size: 0.9rem; }
+.tier-items strong { color: var(--text); }
+/* ---------- Section: header, panah, dan animasi buka-tutup ---------- */
+.section-head {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  background: none;
+  border: none;
+  color: var(--text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-align: left;
+}
+.section-head:hover { color: var(--accent); }
+
+/* Panah: berputar 180 derajat saat card terbuka */
+.chevron {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform 0.3s ease;
+}
+.chevron.open { transform: rotate(180deg); }
+
+/* Wrapper animasi: tinggi berubah dari 0fr ke 1fr */
+.section-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease;
+}
+.section-wrap.open { grid-template-rows: 1fr; }
+
+.section-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.section-text {
+  padding: 0 20px 20px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+/* Hormati pengaturan "kurangi animasi" di perangkat pengguna */
+@media (prefers-reduced-motion: reduce) {
+  .chevron,
+  .section-wrap { transition: none; }
+}
+/* ---------- Tooltip home: nama dan info ---------- */
+.pin-tip {
+  display: grid;
+  gap: 2px;
+  width: max-content;
+  max-width: 220px;
+  white-space: normal;
+  text-align: left;
+}
+.pin-tip strong {
+  font-size: 0.85rem;
+  color: var(--accent);
+}
+.pin-tip small {
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* ---------- Kartu yang berkedip saat pin diklik ---------- */
+.card.blink {
+  border-color: var(--accent);
+  animation: blink 0.6s ease 2;
+}
+@keyframes blink {
+  0%,
+  100% {
+    box-shadow: var(--shadow);
+  }
+  50% {
+    box-shadow: 0 0 0 4px var(--accent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card.blink {
+    animation: none;
+  }
+}
+/* ---------- Home: jarak dan judul bagian topik ---------- */
+.home-diagram { margin-bottom: 56px; }
+
+.topics-intro {
+  margin: 56px 0 20px;
+}
+.topics-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 6px;
+}
+.topics-sub {
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
