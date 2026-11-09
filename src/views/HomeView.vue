@@ -13,62 +13,84 @@ const setupPoints = computed(() =>
       y: t.pin.y,
       label: t.name,
       text: t.info,
-      sectionId: t.slug, // slug dipakai sebagai penghubung ke kartu
+      sectionId: t.slug, // slug menghubungkan titik dan kartu
     }))
 )
 
-// Slug kartu yang sedang berkedip
-const highlight = ref(null)
+// Slug yang sedang disorot (karena hover kartu atau titik)
+const hovered = ref(null)
+// Slug kartu yang sedang berkedip setelah titik diklik
+const blinking = ref(null)
 
-// Dipanggil saat pin diklik: scroll ke kartu, lalu berkedip
+// Dipanggil saat titik diklik: scroll ke kartu, lalu berkedip
 function focusCard(slug) {
-  const el = document.getElementById('card-' + slug)
-  el?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+  document.getElementById('card-' + slug)?.scrollIntoView({ behavior: 'smooth', block: 'center' })
 
-  // Jeda agar kedipan terlihat setelah scroll selesai
   setTimeout(() => {
-    highlight.value = slug
+    blinking.value = slug
     setTimeout(() => {
-      if (highlight.value === slug) highlight.value = null
+      if (blinking.value === slug) blinking.value = null
     }, 1200)
   }, 500)
+}
+
+function scrollToMap() {
+  document.getElementById('peta')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 </script>
 
 <template>
   <PageHero
+    brand
+    eyebrow="Panduan setup desktop"
     title="Realistek"
-    subtitle="Kenali setup desktop kamu"
-    paragraph="Realistek membantu kamu memahami komponen setup desktop, mulai dari keyboard, mouse, speaker, hingga earphone. Arahkan kursor ke titik pada gambar, lalu klik untuk melihat kartunya."
-  />
+    subtitle="Kenali setup desktop kamu, satu komponen per satu"
+    paragraph="Dari keyboard sampai earphone, pahami fungsi tiap perangkat sebelum memilihnya. Arahkan kursor ke titik pada gambar untuk melihat ringkasannya."
+  >
+    <template #actions>
+      <RouterLink to="/topik/keyboard" class="btn btn-primary">Mulai dari Keyboard →</RouterLink>
+      <button type="button" class="btn btn-ghost" @click="scrollToMap">Lihat peta setup</button>
+    </template>
+  </PageHero>
 
-  <section class="diagram">
+  <section id="peta" class="panel">
     <HotspotImage
       src="/img/setup.webp"
       alt="Setup desktop"
-      caption="Arahkan kursor ke titik untuk melihat info, klik untuk menuju topik."
+      caption="Arahkan kursor ke titik untuk melihat info, klik untuk menuju kartu topik."
       :points="setupPoints"
+      :active-id="hovered"
       @select="focusCard"
+      @hover="hovered = $event"
     />
   </section>
 
   <section class="topics-intro">
-    <h2 class="topics-title">Pilih Topik</h2>
-    <p class="topics-sub">Empat komponen utama setup desktop yang bisa kamu pelajari satu per satu.</p>
+    <h2 class="section-title">Pilih topik</h2>
+    <p class="section-sub">Empat komponen utama setup desktop. Mulai dari yang paling sering kamu pakai.</p>
   </section>
 
   <section class="grid">
     <RouterLink
-      v-for="topic in topics"
+      v-for="(topic, i) in topics"
       :key="topic.slug"
       :id="'card-' + topic.slug"
       :to="`/topik/${topic.slug}`"
-      class="card"
-      :class="{ blink: highlight === topic.slug }"
+      class="topic-card"
+      :class="{ hovered: hovered === topic.slug, blink: blinking === topic.slug }"
+      :style="{ '--i': i }"
+      @mouseenter="hovered = topic.slug"
+      @mouseleave="hovered = null"
+      @focus="hovered = topic.slug"
+      @blur="hovered = null"
     >
-      <span class="card-icon">{{ topic.icon }}</span>
+      <div class="card-top">
+        <span class="card-icon">{{ topic.icon }}</span>
+        <span class="card-num">{{ String(i + 1).padStart(2, '0') }}</span>
+      </div>
       <h3>{{ topic.name }}</h3>
       <p>{{ topic.info }}</p>
+      <span class="card-cta">Pelajari <span class="card-arrow">→</span></span>
     </RouterLink>
   </section>
 </template>
